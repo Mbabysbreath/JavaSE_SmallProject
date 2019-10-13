@@ -29,11 +29,9 @@ public class Teacher extends User {
         switch(select){
             case 0:return true;
             case 1:
-                System.out.println("请上架");
                 putBook();
                 break;
             case 2:
-                System.out.println("请查阅图书");
                 queryBooks();
                 break;
             case 3:

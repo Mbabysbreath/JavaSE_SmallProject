@@ -17,6 +17,9 @@ public abstract class User {
         this.id=id;
         this.name=name;
     }
+    //单例模式：将使用者信息保存起来,
+    // 并通过public的getcurUSer()获取当前USer信息
+      private static User curUser=null;
     public static User login() throws Exception {
         Scanner scanner = new Scanner(System.in);
         System.out.println("请输入学号：");
@@ -26,22 +29,34 @@ public abstract class User {
         System.out.println("请输入身份：");
         String role=scanner.nextLine();
         if(role.equals("学生")){
-            return new Student(id,name);
+            curUser=new Student(id,name);
         }else if(role.equals("老师")){
-            return new Teacher(id,name);
+            curUser=new Teacher(id,name);
         }else{
             throw new Exception("错误的身份");
         }
+        return curUser;
+    }
+    public static User getCurUser(){
+        return curUser;
     }
     public abstract void menu();
     public abstract boolean input();
     //查书
-    public void queryBooks(){//查书
+    public void queryBooks(){//查书:查书库中所有书的信息
         List<Book> bookList = Action.queryBooks();
         for(Book book:bookList){
-            //借阅
-            System.out.printf("《%s》 ");
+            System.out.printf("《%s》by %s 价格: %.2f 存量: %d 借阅次数: %d%n",
+                    book.getTitle(),book.getAuthor(),book.getPrice(),
+                    book.getCurCount(),book.getBorrowedCount());
         }
-        System.out.println("共查询到"+bookList.size());
+        System.out.println("共查询到"+bookList.size()+"本书");
+    }
+
+    public String getId() {
+        return id;
+    }
+    public String getName(){
+        return name;
     }
 }

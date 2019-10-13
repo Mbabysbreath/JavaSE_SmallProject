@@ -29,10 +29,11 @@ public class BookShelf {
     }
     //给书架里放入新书
     public void putBook(Book book){
+
         bookList.add(book);
     }
-    public void queryBooks(){
-        return;
+    public List<Book> queryBooks(){//返回图书的集合bookList
+        return new ArrayList<>(bookList);
     }
 
 }

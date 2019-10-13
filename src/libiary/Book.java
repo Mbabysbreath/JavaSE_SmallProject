@@ -31,7 +31,8 @@ public class Book {
         this.borrowedCount=0;
     }
     public boolean is(String ISBN){
-        return this.equals(ISBN);
+
+        return this.ISBN.equals(ISBN);
     }
     public void increaseCount(int count){
         curCount+=count;
@@ -39,5 +40,26 @@ public class Book {
     }
     public String getTitle(){
         return title;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public int getCurCount() {
+        return curCount;
+    }
+
+    public int getBorrowedCount() {
+        return borrowedCount;
+    }
+
+    public void borrowBook() {
+        curCount--;
+        borrowedCount++;
     }
 }

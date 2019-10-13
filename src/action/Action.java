@@ -1,8 +1,14 @@
 package action;
 
 import database.BookShelf;
+import database.RecordShelf;
+import exception.BorrowedOutException;
 import exception.NoSuchBookException;
+import exception.YetBorrowedException;
 import libiary.Book;
+import libiary.User;
+
+import java.util.List;
 
 /**
  * @author ZhaoMin
@@ -25,6 +31,23 @@ public class Action {
     }
     public  static List<Book> queryBooks(){
         BookShelf bookShelf=BookShelf.getInstance();
-        bookShelf.queryBooks();
+        return   bookShelf.queryBooks();
+    }
+
+    public static Book borrowBook(User user, String ISBN)
+            throws BorrowedOutException, YetBorrowedException, NoSuchBookException {
+        BookShelf bookShelf=BookShelf.getInstance();
+        RecordShelf recordShelf=RecordShelf.getInstance();
+        Book book= bookShelf.search(ISBN);
+        if(book.getCurCount()<=0) {
+            throw new BorrowedOutException();
+        }
+        if(recordShelf.contains(user,ISBN)){
+            //有过借书记录的不能再借
+            throw new YetBorrowedException();
+        }
+        book.borrowBook();
+        recordShelf.putRecord(user,ISBN);
+        return book;
     }
 }
