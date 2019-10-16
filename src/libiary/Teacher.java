@@ -19,7 +19,7 @@ public class Teacher extends User {
         System.out.println("0.退出");
         System.out.println("1.上架");
         System.out.println("2.查阅图书");
-        System.out.println("3.查阅记录");
+        System.out.println("3.查询借阅情况");
     }
 
     @Override
@@ -35,7 +35,7 @@ public class Teacher extends User {
                 queryBooks();
                 break;
             case 3:
-                System.out.println("请查阅记录");
+                queryRecords();
                 break;
         }
         return false;

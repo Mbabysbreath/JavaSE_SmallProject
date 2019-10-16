@@ -1,8 +1,11 @@
 package libiary;
 
 import action.Action;
+import database.BookShelf;
+import database.RecordShelf;
 import exception.BorrowedOutException;
 import exception.NoSuchBookException;
+import exception.NotBorrowedException;
 import exception.YetBorrowedException;
 
 import java.util.Scanner;
@@ -28,6 +31,7 @@ public class Student extends User {
     public boolean input() {
         Scanner scanner = new Scanner(System.in);
         int select=scanner.nextInt();
+        scanner.nextLine();
         switch(select){
             case 0:return true;
             case 1:
@@ -37,7 +41,7 @@ public class Student extends User {
                 borrowBook();
                 break;
             case 3:
-                System.out.println("已归还");
+                returnbook();
                 break;
         }
         return false;
@@ -61,6 +65,21 @@ public class Student extends User {
             System.out.println("此书已被借空");
         }catch(YetBorrowedException e){
             System.out.println("这本书已经借过了，不能重复借书");
+        }
+    }
+    //先输入书本的ISBN
+    //判断有没有这本书
+    //有没有借阅记录
+    private static void returnbook(){
+        User user=User.getCurUser();
+        System.out.println("请输入书籍的ISBN:");
+        Scanner scanner=new Scanner(System.in);
+        String ISBN=scanner.nextLine();
+
+        try {
+            Action.returnbook(user,ISBN);
+        } catch (NoSuchBookException e) {
+        }catch(NotBorrowedException e){
         }
 
     }

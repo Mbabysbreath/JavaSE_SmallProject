@@ -2,10 +2,13 @@ package action;
 
 import database.BookShelf;
 import database.RecordShelf;
+import database.Where;
 import exception.BorrowedOutException;
 import exception.NoSuchBookException;
+import exception.NotBorrowedException;
 import exception.YetBorrowedException;
 import libiary.Book;
+import libiary.Record;
 import libiary.User;
 
 import java.util.List;
@@ -49,5 +52,23 @@ public class Action {
         book.borrowBook();
         recordShelf.putRecord(user,ISBN);
         return book;
+    }
+
+    public static void returnbook(User user,String ISBN) throws NoSuchBookException, NotBorrowedException {
+        BookShelf bookShelf=BookShelf.getInstance();
+        Book book=bookShelf.search(ISBN);
+
+        RecordShelf recordShelf=RecordShelf.getInstance();
+        recordShelf.remove(user,ISBN);//如果有借阅记录，就直接删除记录
+        book.returnBook();//表现为存量加1
+    }
+
+    public static List<Book> queryBooksByWhere(Where<Book> where) {
+        BookShelf bookShelf=BookShelf.getInstance();
+        return bookShelf.queryBooks(where);
+    }
+    public static List<Record> queryRecords(){
+        RecordShelf recordShelf=RecordShelf.getInstance();
+        return recordShelf.queryRecords(null);
     }
 }
