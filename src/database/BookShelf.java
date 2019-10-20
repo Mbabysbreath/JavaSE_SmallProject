@@ -4,6 +4,7 @@ import exception.NoSuchBookException;
 import libiary.Book;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -32,8 +33,14 @@ public class BookShelf {
 
         bookList.add(book);
     }
-    public List<Book> queryBooks(){//返回图书的集合bookList
-        return new ArrayList<>(bookList);
+    public List<Book> queryBooks(Where<Book> where,Comparator<Book> orderBy){//返回图书的集合bookList
+      List<Book> ret=new ArrayList<>();
+      for(Book book:bookList){
+          if(where==null||where.test(book)){
+              ret.add(book);
+          }
+      }
+        return ret;
     }
 
 }

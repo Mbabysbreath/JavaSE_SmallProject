@@ -58,7 +58,8 @@ public class Student extends User {
         //借书时传入读者的信息和ISBN
         try {
             Book book = Action.borrowBook(user, ISBN);
-            System.out.printf("%s借阅成功！%n",book.getTitle());
+            System.out.printf("《%s》借阅成功！%n",book.getTitle());
+            System.out.println();
         }catch(NoSuchBookException e){
             System.out.println("抱歉！没有找到此书的相关信息");
         }catch (BorrowedOutException e){
@@ -77,9 +78,12 @@ public class Student extends User {
         String ISBN=scanner.nextLine();
 
         try {
-            Action.returnbook(user,ISBN);
+            Book book=Action.returnbook(user,ISBN);
+            System.out.printf("《%s》归还成功！",book.getTitle());
         } catch (NoSuchBookException e) {
+            System.out.println("错误！没有这本书");
         }catch(NotBorrowedException e){
+            System.out.println("错误！这本书没有被你借过！");
         }
 
     }

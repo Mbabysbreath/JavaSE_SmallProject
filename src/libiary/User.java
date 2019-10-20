@@ -3,9 +3,7 @@ package libiary;
 import action.Action;
 import database.Where;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 /**
  * @author ZhaoMin
@@ -53,16 +51,33 @@ public abstract class User {
         }
     }
 
-    private static class BookTitle implements Where<Book>{
-        private  String title;;
-        BookTitle(String title){
-            this.title=title;
+    private static class BookTitle implements Where<Book> {
+        private String title;
+        ;
+
+        BookTitle(String title) {
+            this.title = title;
         }
+
         @Override
         public boolean test(Book book) {
             return book.getTitle().equals(title);
         }
     }
+        private enum OrderBy{
+            OTHER,TITLE,PRICE_ASC,PRICE_DESC,AUTHOR
+        }
+
+        private static final HashMap<OrderBy, Comparator<Book>> comparators = new HashMap<>();
+            static {
+                comparators.put(OrderBy.TITLE, new TitleComparator());
+                comparators.put(OrderBy.PRICE_ASC,new PriceComparator(true));
+                comparators.put(OrderBy.PRICE_DESC, new PriceComparator(false));
+                comparators.put(OrderBy.AUTHOR,new AuthorComparator());
+            }
+            private static Comparator<Book> getComaparator(int selected){
+                return  comparators.get(selected);
+            }
     //查书
     protected void queryBooks(){//查书:查书库中所有书的信息
         Scanner scanner=new Scanner(System.in);
@@ -75,7 +90,14 @@ public abstract class User {
         List<Book> bookList;
         switch (selected) {
             case 1:
-                bookList = Action.queryBooks();
+                System.out.println("请选择排序顺序：");
+                System.out.println(OrderBy.TITLE.ordinal() + ".按标题排序");
+                System.out.println("2.按价格从低到高");
+                System.out.println("3.按价格从高到低");
+                System.out.println("4.按作者排序");
+                int selected2 =scanner.nextInt();
+                scanner.nextLine();
+                bookList = Action.queryBooks(getComaparator(selected2));
                 break;
             case 2:
                 bookList = Action.queryBooksByWhere(new Current());
@@ -103,7 +125,7 @@ public abstract class User {
     protected void queryRecords(){
         List<Record> recordList=Action.queryRecords();
         for(Record record:recordList){
-            System.out.printf("%s,%s,%s",
+            System.out.printf("%s,%s,%s%n",
                     record.getUserId(),
                     record.getBookISBN(),
                     record.getBorrowedAt());

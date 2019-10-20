@@ -11,6 +11,7 @@ import libiary.Book;
 import libiary.Record;
 import libiary.User;
 
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -32,9 +33,9 @@ public class Action {
            return book;
        }
     }
-    public  static List<Book> queryBooks(){
+    public  static List<Book> queryBooks(Comparator<Book> orderBy){
         BookShelf bookShelf=BookShelf.getInstance();
-        return   bookShelf.queryBooks();
+        return   bookShelf.queryBooks(null,orderBy);
     }
 
     public static Book borrowBook(User user, String ISBN)
@@ -54,18 +55,19 @@ public class Action {
         return book;
     }
 
-    public static void returnbook(User user,String ISBN) throws NoSuchBookException, NotBorrowedException {
+    public static Book returnbook(User user,String ISBN) throws NoSuchBookException, NotBorrowedException {
         BookShelf bookShelf=BookShelf.getInstance();
         Book book=bookShelf.search(ISBN);
 
         RecordShelf recordShelf=RecordShelf.getInstance();
         recordShelf.remove(user,ISBN);//如果有借阅记录，就直接删除记录
         book.returnBook();//表现为存量加1
+        return book;
     }
 
     public static List<Book> queryBooksByWhere(Where<Book> where) {
         BookShelf bookShelf=BookShelf.getInstance();
-        return bookShelf.queryBooks(where);
+        return bookShelf.queryBooks(where,null);
     }
     public static List<Record> queryRecords(){
         RecordShelf recordShelf=RecordShelf.getInstance();
