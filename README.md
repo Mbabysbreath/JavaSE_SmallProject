@@ -1,5 +1,5 @@
 # JavaSE_SmallProject
-javaSE小项目
+**javaSE小项目**
 这是用JavaS SE部分所学的基础知识做的一个小型的图书管理系统，可以进行：
 （1）学生、老师的登录
 （2）老师上架图书，查询借阅记录
